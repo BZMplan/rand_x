@@ -121,12 +121,12 @@ impl BasicApp {
             );
         }
     }
-    //当软件关闭的时候
-    //fn when_app_close(&self) {
-    //    nwg::modal_info_message(&self.window, "再见!", &format!("欢迎下次使用!"));
-    //      nwg::modal_info_message(&self.window, "Goodbye", &format!("Goodbye {}", self.name_edit.text()));
-    //    nwg::stop_thread_dispatch();
-    //}
+    当软件关闭的时候
+    fn when_app_close(&self) {
+        //nwg::modal_info_message(&self.window, "再见!", &format!("欢迎下次使用!"));
+        //nwg::modal_info_message(&self.window, "Goodbye", &format!("Goodbye {}", self.name_edit.text()));
+        nwg::stop_thread_dispatch();
+    }
 }
 
 fn main() {
