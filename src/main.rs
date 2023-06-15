@@ -34,12 +34,67 @@ pub struct BasicApp {
 impl BasicApp {
     fn get_student(&self) {
         let mut rng = rand::thread_rng();
-        let stduents = ["a", "b", "c"];
+        let stduents = [
+            "汪立思",
+            "王金熙",
+            "桂英涛",
+            "丁李湘怡",
+            "严欢怡",
+            "彭文轩",
+            "宁志现",
+            "邓轲文",
+            "陈文雪",
+            "陈博",
+            "程雯",
+            "桂琦",
+            "刘梦怡",
+            "韩明轩",
+            "李磊",
+            "张正",
+            "王馨悦",
+            "晏永鸿",
+            "葛照祥",
+            "胡子恒",
+            "洪凯乐",
+            "蒋雨阳",
+            "李研",
+            "魏灿",
+            "胡梦樊",
+            "胡闻博",
+            "李勋南",
+            "左知恩",
+            "张亚杰",
+            "张广杰",
+            "丁明锐",
+            "余雪霏",
+            "刘心语",
+            "冯琳昱",
+            "李诗妍",
+            "郑雨萱",
+            "王学强",
+            "戴凌翔",
+            "傅瑞琦",
+            "董彦欣",
+            "李爽",
+            "丁善颖",
+            "肖冰涛",
+            "黄妍",
+            "何微",
+            "雷明扬",
+            "刘承业",
+            "裴作佳",
+            "王传浩",
+            "查彤彤",
+            "周宪波",
+            "丁妍",
+            "夏厚禹",
+            "彭杰瑞",
+        ];
         let student = rng.gen_range(0..stduents.len());
         let id = usize_to_i32(student);
 
         let path = format!("src/data/{}.txt", id);
-        if check_file(path) {
+        if check_file(id) {
             let _ = create_file(id);
         } else {
             let count = read_file(id);
@@ -106,8 +161,9 @@ fn create_file(id: i32) -> Result<(), io::Error> {
     Ok(())
 }
 
-fn check_file(bible_path: String) -> bool {
-    let f = File::open(bible_path);
+fn check_file(id:i32) -> bool {
+    let path = format!("src/data/{}.txt",id);
+    let f = File::open(path);
     let result = match f {
         Ok(_file) => true,
         Err(_err) => false,
