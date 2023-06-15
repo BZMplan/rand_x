@@ -16,7 +16,7 @@ pub struct BasicApp {
     //设置窗体大小和窗体标题
     #[nwg_control(size: (300, 300), position: (300, 300), title: "点名程序", flags: "WINDOW|VISIBLE")]
     //当程序关闭时显示弹窗
-    //#[nwg_events( OnWindowClose: [BasicApp::when_app_close] )]
+    #[nwg_events( OnWindowClose: [BasicApp::when_app_close] )]
     window: nwg::Window,
 
     #[nwg_layout(parent: window, spacing: 1)]
@@ -121,7 +121,7 @@ impl BasicApp {
             );
         }
     }
-    当软件关闭的时候
+    //当软件关闭的时候
     fn when_app_close(&self) {
         //nwg::modal_info_message(&self.window, "再见!", &format!("欢迎下次使用!"));
         //nwg::modal_info_message(&self.window, "Goodbye", &format!("Goodbye {}", self.name_edit.text()));
