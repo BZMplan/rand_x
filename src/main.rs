@@ -93,10 +93,21 @@ impl BasicApp {
         let student = rng.gen_range(0..stduents.len());
         let id = usize_to_i32(student);
 
-        let path = format!("src/data/{}.txt", id);
         if check_file(id) {
-            let _ = create_file(id);
+            
+            let count = read_file(id);
+            let _ = write_file(id, count.to_string());
+            nwg::modal_info_message(
+                &self.window,
+                "恭喜",
+                &format!(
+                    "恭喜 {} !\n目前你已经被抽到 {} 次",
+                    stduents[student],
+                    string_to_i32(count) + 1
+                ),
+            );
         } else {
+            let _ = create_file(id);
             let count = read_file(id);
             let _ = write_file(id, count.to_string());
             nwg::modal_info_message(
@@ -161,8 +172,8 @@ fn create_file(id: i32) -> Result<(), io::Error> {
     Ok(())
 }
 
-fn check_file(id:i32) -> bool {
-    let path = format!("src/data/{}.txt",id);
+fn check_file(id: i32) -> bool {
+    let path = format!("src/data/{}.txt", id);
     let f = File::open(path);
     let result = match f {
         Ok(_file) => true,
