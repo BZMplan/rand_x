@@ -33,6 +33,8 @@ pub struct BasicApp {
 }
 
 impl BasicApp {
+
+    /// 获取学生数据
     fn get_student(&self) {
         let mut rng = rand::thread_rng();
         let stduents = [
@@ -92,38 +94,7 @@ impl BasicApp {
             "彭杰瑞",
         ];
         let student = rng.gen_range(0..stduents.len());
-        let id = usize_to_i32(student);
-
-        //first version 用文本文件存贮数据
-        // if check_file(id) {
-
-        //     let count = read_file(id);
-        //     let _ = write_file(id, count.to_string());
-        //     nwg::modal_info_message(
-        //         &self.window,
-        //         "恭喜",
-        //         &format!(
-        //             "恭喜 {} !\n目前你已经被抽到 {} 次",
-        //             stduents[student],
-        //             string_to_i32(count) + 1
-        //         ),
-        //     );
-        // } else {
-        //     let _ = create_file(id);
-        //     let count = read_file(id);
-        //     let _ = write_file(id, count.to_string());
-        //     nwg::modal_info_message(
-        //         &self.window,
-        //         "恭喜",
-        //         &format!(
-        //             "恭喜 {} !\n目前你已经被抽到 {} 次",
-        //             stduents[student],
-        //             string_to_i32(count) + 1
-        //         ),
-        //     );
-        // }
-
-        //second version 用json文件存储数据
+        let _id = usize_to_i32(student);
 
         let mut file = File::open("data/data.json").expect("Unable to open file");
         let mut contents = String::new();
@@ -175,12 +146,11 @@ use std::{
     io::{self, Read, Write},
 };
 
+/// 读取txt文件中的数据
+/// 此代码已失效 
 fn read_file(id: i32) -> String {
     let path = format!("src/data/{}.txt", id);
 
-    //write_file
-    //let mut file = fs::File::create(path).unwrap();
-    //let _ = file.write_all(b"Hello");
 
     //read_file
     let count = fs::read(path).unwrap();
@@ -189,6 +159,8 @@ fn read_file(id: i32) -> String {
     buffer.to_string()
 }
 
+/// 向txt文件中写入数据
+/// 此代码已失效
 fn write_file(id: i32, count: String) -> Result<(), io::Error> {
     let path = format!("src/data/{}.txt", id);
     let mut file = fs::File::create(path).unwrap();
@@ -198,14 +170,16 @@ fn write_file(id: i32, count: String) -> Result<(), io::Error> {
     let _ = file.write_all(msg_str.as_bytes());
     Ok(())
 }
-
+/// 创建txt文件
+/// 此代码已失效
 fn create_file(id: i32) -> Result<(), io::Error> {
     let path = format!("src/data/{}.txt", id);
     let mut file = fs::File::create(path).unwrap();
     let _ = file.write_all(b"0");
     Ok(())
 }
-
+/// 检查txt文件是否存在
+/// 此代码已失效
 fn check_file(id: i32) -> bool {
     let path = format!("src/data/{}.txt", id);
     let f = File::open(path);
@@ -215,7 +189,8 @@ fn check_file(id: i32) -> bool {
     };
     result
 }
-
+/// 从json文件中获取数据
+/// 此代码正在使用中
 fn get_info(mut data:Value,student:usize) ->u64{
     //读取数据
     if let Some(people) = data.as_array_mut() {
@@ -234,11 +209,12 @@ fn get_info(mut data:Value,student:usize) ->u64{
         todo!();
     }
 }
-
+/// 将usize类型的数据转换为i32
 fn usize_to_i32(usize: usize) -> i32 {
     usize as i32
 }
-
+/// 将string类型的数据转换位i32
+/// 此代码已失效
 fn string_to_i32(string: String) -> i32 {
     string.parse().unwrap()
 }
