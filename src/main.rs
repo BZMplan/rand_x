@@ -12,6 +12,7 @@ use nwg::NativeUi;
 use rand::Rng;
 use serde_json::Value;
 
+
 #[derive(Default, NwgUi)]
 pub struct BasicApp {
     //设置窗体大小和窗体标题
