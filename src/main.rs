@@ -10,6 +10,7 @@ extern crate native_windows_gui as nwg;
 use nwd::NwgUi;
 use nwg::NativeUi;
 use rand::Rng;
+use serde_json::Value;
 
 #[derive(Default, NwgUi)]
 pub struct BasicApp {
@@ -93,33 +94,66 @@ impl BasicApp {
         let student = rng.gen_range(0..stduents.len());
         let id = usize_to_i32(student);
 
-        if check_file(id) {
-            
-            let count = read_file(id);
-            let _ = write_file(id, count.to_string());
-            nwg::modal_info_message(
-                &self.window,
-                "恭喜",
-                &format!(
-                    "恭喜 {} !\n目前你已经被抽到 {} 次",
-                    stduents[student],
-                    string_to_i32(count) + 1
-                ),
-            );
-        } else {
-            let _ = create_file(id);
-            let count = read_file(id);
-            let _ = write_file(id, count.to_string());
-            nwg::modal_info_message(
-                &self.window,
-                "恭喜",
-                &format!(
-                    "恭喜 {} !\n目前你已经被抽到 {} 次",
-                    stduents[student],
-                    string_to_i32(count) + 1
-                ),
-            );
+        //first version 用文本文件存贮数据
+        // if check_file(id) {
+
+        //     let count = read_file(id);
+        //     let _ = write_file(id, count.to_string());
+        //     nwg::modal_info_message(
+        //         &self.window,
+        //         "恭喜",
+        //         &format!(
+        //             "恭喜 {} !\n目前你已经被抽到 {} 次",
+        //             stduents[student],
+        //             string_to_i32(count) + 1
+        //         ),
+        //     );
+        // } else {
+        //     let _ = create_file(id);
+        //     let count = read_file(id);
+        //     let _ = write_file(id, count.to_string());
+        //     nwg::modal_info_message(
+        //         &self.window,
+        //         "恭喜",
+        //         &format!(
+        //             "恭喜 {} !\n目前你已经被抽到 {} 次",
+        //             stduents[student],
+        //             string_to_i32(count) + 1
+        //         ),
+        //     );
+        // }
+
+        //second version 用json文件存储数据
+
+        let mut file = File::open("data/data.json").expect("Unable to open file");
+        let mut contents = String::new();
+        file.read_to_string(&mut contents)
+            .expect("Unable to read data from file");
+
+        // 将JSON字符串解析为serde_json::Value
+        let mut data: Value = serde_json::from_str(&contents).unwrap();
+
+        // 修改JSON数组中某个对象的某个值
+        if let Some(people) = data.as_array_mut() {
+            if let Some(person) = people.get_mut(student) {
+                if let Some(count) = person["count"].as_u64() {
+                    person["count"] = Value::from(count + 1);
+                }
+            }
         }
+
+        let count = get_info(data.to_owned(), student);
+
+        // 将修改后的JSON对象序列化为字符串并写回文件
+        let json_string = serde_json::to_string_pretty(&data).unwrap();
+        let mut file = File::create("data/data.json").expect("Unable to create file");
+        file.write_all(json_string.as_bytes())
+            .expect("Unable to write data to file");
+        nwg::modal_info_message(
+            &self.window,
+            "恭喜",
+            &format!("恭喜 {} !\n目前你已经被抽到 {} 次", stduents[student],count),
+        );
     }
     //当软件关闭的时候
     fn when_app_close(&self) {
@@ -138,7 +172,7 @@ fn main() {
 
 use std::{
     fs::{self, File},
-    io::{self, Write},
+    io::{self, Read, Write},
 };
 
 fn read_file(id: i32) -> String {
@@ -180,6 +214,25 @@ fn check_file(id: i32) -> bool {
         Err(_err) => false,
     };
     result
+}
+
+fn get_info(mut data:Value,student:usize) ->u64{
+    //读取数据
+    if let Some(people) = data.as_array_mut() {
+        if let Some(person) = people.get_mut(student) {
+            if let Some(count) = person["count"].as_u64() {
+                count
+            }
+            else {
+                todo!();
+            }
+        }else {
+            todo!();
+        }
+    }
+    else {
+        todo!();
+    }
 }
 
 fn usize_to_i32(usize: usize) -> i32 {
