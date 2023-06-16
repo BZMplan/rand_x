@@ -189,6 +189,7 @@ fn check_file(id: i32) -> bool {
     };
     result
 }
+
 /// 从json文件中获取数据
 /// 此代码正在使用中
 fn get_info(mut data:Value,student:usize) ->u64{
