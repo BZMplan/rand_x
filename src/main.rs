@@ -14,7 +14,6 @@ use std::{
     fs::{self, File},
     io::{self, Read, Write},
 };
-
 #[derive(Default, NwgUi)]
 pub struct BasicApp {
     //设置窗体大小和窗体标题
