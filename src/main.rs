@@ -6,13 +6,16 @@
 
 extern crate native_windows_derive as nwd;
 extern crate native_windows_gui as nwg;
-
 use nwd::NwgUi;
 use nwg::NativeUi;
-
 use rand::prelude::*;
+use rand_x::tool_function::{get_info, usize_to_i32};
 use serde_json::Value;
-//
+use std::{
+    fs::{self, File},
+    io::{self, Read, Write},
+};
+
 #[derive(Default, NwgUi)]
 pub struct BasicApp {
     //设置窗体大小和窗体标题
@@ -34,7 +37,6 @@ pub struct BasicApp {
 }
 
 impl BasicApp {
-
     /// 获取学生数据
     fn get_student(&self) {
         let mut rng = rand::thread_rng();
@@ -124,7 +126,10 @@ impl BasicApp {
         nwg::modal_info_message(
             &self.window,
             "恭喜",
-            &format!("恭喜 {} !\n目前你已经被抽到 {} 次", stduents[student],count),
+            &format!(
+                "恭喜 {} !\n目前你已经被抽到 {} 次",
+                stduents[student], count
+            ),
         );
     }
     //当软件关闭的时候
@@ -142,16 +147,10 @@ fn main() {
     nwg::dispatch_thread_events();
 }
 
-use std::{
-    fs::{self, File},
-    io::{self, Read, Write},
-};
-
 /// 读取txt文件中的数据
-/// 此代码已失效 
+/// 此代码已失效
 fn read_file(id: i32) -> String {
     let path = format!("src/data/{}.txt", id);
-
 
     //read_file
     let count = fs::read(path).unwrap();
@@ -191,30 +190,6 @@ fn check_file(id: i32) -> bool {
     result
 }
 
-/// 从json文件中获取数据
-/// 此代码正在使用中
-fn get_info(mut data:Value,student:usize) ->u64{
-    //读取数据
-    if let Some(people) = data.as_array_mut() {
-        if let Some(person) = people.get_mut(student) {
-            if let Some(count) = person["count"].as_u64() {
-                count
-            }
-            else {
-                todo!();
-            }
-        }else {
-            todo!();
-        }
-    }
-    else {
-        todo!();
-    }
-}
-/// 将usize类型的数据转换为i32
-fn usize_to_i32(usize: usize) -> i32 {
-    usize as i32
-}
 /// 将string类型的数据转换位i32
 /// 此代码已失效
 fn string_to_i32(string: String) -> i32 {
