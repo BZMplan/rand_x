@@ -9,7 +9,8 @@ extern crate native_windows_gui as nwg;
 
 use nwd::NwgUi;
 use nwg::NativeUi;
-use rand::Rng;
+
+use rand::prelude::*;
 use serde_json::Value;
 
 #[derive(Default, NwgUi)]
