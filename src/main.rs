@@ -3,7 +3,6 @@
     A very simple application that shows your name in a message box.
     Unlike `basic_d`, this example uses layout to position the controls in the window
 */
-
 extern crate native_windows_derive as nwd;
 extern crate native_windows_gui as nwg;
 use nwd::NwgUi;
